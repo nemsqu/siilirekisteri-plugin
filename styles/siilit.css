@@ -1,0 +1,164 @@
+#inputcontainer {
+    margin: auto;
+    text-align: center;
+    row-gap: 20px;
+    width: max-content;
+    font-size: 20px;
+}
+
+#treeinputs {
+    text-align: center;
+    font-size: 20px;
+}
+
+#treecontainer {
+    text-align: center;
+    font-size: 20px;
+    align-items: center;
+    display: inline-block;
+}
+
+
+input, select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 15px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-height: 25px;
+    min-height: fit-content;
+}
+
+#alive {
+    padding-bottom: 10px;
+}
+
+#siili-submit, #find-tree {
+    max-height: max-content;
+    background-color: aliceblue;
+}
+
+
+.card-panel {
+    color: red;
+}
+
+h3 {
+    max-width: fit-content;
+    display: inline;
+    font-size: small;
+}
+
+#siili-search {
+    max-width: 400px;
+}
+
+#find-tree {
+    max-width: 400px;
+    min-height: fit-content;
+}
+
+#tree {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    margin: auto auto 30px auto;
+    width: 100%;
+}
+
+/*Family tree styling source: https://codepen.io/chuongdang/pen/lcnsC*/
+.familytree ul {
+	padding-top: 20px; position: relative;
+	transition: all 0.5s;
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+}
+
+.familytree li {
+	float: left; 
+	position: relative;
+	padding: 20px 5px 0 5px;
+	transition: all 0.5s;
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+}
+
+/*Drawing the vertical connectors*/
+.familytree li::before, .familytree li::after{
+	content: '';
+	position: absolute; 
+    top: 0; 
+    right: 50%;
+	border-top: 1px solid rgb(71, 71, 71);
+	width: 50%; 
+    height: 20px;
+}
+
+.familytree li::after{
+	right: auto; 
+    left: 50%;
+	border-left: 1px solid rgb(71, 71, 71);
+}
+
+/*Removing left-right connectors from nodes without siblings*/
+.familytree li:only-child::after, .familytree li:only-child::before {
+	display: none;
+}
+
+
+/*Removing vertical connectors from first and last child*/
+.familytree li:first-child::before, .familytree li:last-child::after{
+	border: 0 none;
+}
+
+/*Adding vertical connectors to the last right-hand children*/
+.familytree li:last-child::before{
+	border-right: 1px solid rgb(71, 71, 71);
+	border-radius: 0 5px 0 0;
+	-webkit-border-radius: 0 5px 0 0;
+	-moz-border-radius: 0 5px 0 0;
+}
+
+/*Connectors downwards from parents*/
+.familytree ul ul::before{
+	content: '';
+	position: absolute; top: 0; left: 50%;
+	border-left: 1px solid rgb(71, 71, 71);
+	width: 0; 
+    height: 20px;
+}
+
+/*Node styling*/
+.familytree li p{
+	border: 1px solid rgb(71, 71, 71);
+	padding: 5px 5px;
+    margin: auto;
+	text-decoration: none;
+    text-align: center;
+    vertical-align: middle;
+	color: rgb(0, 0, 0);
+	display: inline-block;
+    max-width: 9vw;
+    flex: content;
+    white-space: pre-line;
+
+	
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	
+	transition: all 0.5s;
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+}
+
+body{
+    height: 100%;
+    width: 100%;
+}
+
+.warning {
+    color: rgb(187, 2, 2);
+}
+
