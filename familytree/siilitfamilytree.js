@@ -49,9 +49,9 @@ function siilit_showTree(data){
     ilnessesWarning.innerHTML = "Suvusta löytyy merkintöjä:<br>";
     ilnessesWarning.id = "ilnesses-warning";
     let ilnesses = false;
+
     //iterating through data for hedgehogs without IDs and checking familyilnesses
     for(const item in data){
-        //console.log(data[item]);
         data[item] = siilit_checkArrayContents(data[item]);
         
         if(data[item][0].Kuolinsyy){
@@ -69,8 +69,8 @@ function siilit_showTree(data){
 
 function siilit_checkFamilyHistory(data){
     let siblings = fatherdaughter = motherson = family = false;
+    
     //parents: father-daughter or mother-son ?
-
     if((data.mumsDad[0].Nimi != "Ei tiedossa")  && (data.mumsDad[0].Nimi === data.dad[0].Nimi)){
         fatherdaughter = true;
     } else if((data.dadsMum[0].Nimi != "Ei tiedossa") && (data.dadsMum[0].Nimi === data.mum[0].Nimi)){

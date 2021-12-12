@@ -164,7 +164,7 @@ function siilit_add_new() {
             VALUES (%s, %s, %s, %s, %s, %s, %s, %d, %s)", $id, $name, $breeder, $father, $mother, $bday, 0, '', $owner
         )
     );
-    echo $amount;
+
     $successCheck = $wpdb->get_var("SELECT Nimi FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$id}'");
     if(!$successCheck){
         siilit_handle_failure();
@@ -176,7 +176,7 @@ function siilit_add_new() {
     if($familyIlnesses){
         ?>
         <div>
-            <h3 id='ilnesses-warning'> Suvusta löytyy merkintöjä:</h3>
+            <h3 class='warning'> Suvusta löytyy merkintöjä:</h3>
             <br>
                 <?php 
                 $i = 0;
@@ -294,28 +294,28 @@ function siilit_add_new() {
     if($fatherdaughter){
         ?>
         <div>
-            <h3 className='warning'> Vanhemmat ovat isä ja tytär. </h3>
+            <h3 class='warning'> Vanhemmat ovat isä ja tytär. </h3>
         </div>
          <?php
     }
     if($motherson){
         ?>
         <div>
-            <h3 className='warning'> Vanhemmat ovat emo ja poika. </h3>
+            <h3 class='warning'> Vanhemmat ovat emo ja poika. </h3>
         </div>
          <?php
     }
     if($siblings){
         ?>
         <div>
-            <h3 className='warning'> Vanhemmilla on sama emo ja/tai isä. </h3>
+            <h3 class='warning'> Vanhemmilla on sama emo ja/tai isä. </h3>
         </div>
          <?php
     } 
     if($familyWarning){
         ?>
         <div>
-            <h3 className='warning'> Toisen vanhemman vanhempi on toisen vanhemman isovanhempi. </h3>
+            <h3 class='warning'> Toisen vanhemman vanhempi on toisen vanhemman isovanhempi. </h3>
         </div>
          <?php
     }

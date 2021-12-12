@@ -78,7 +78,7 @@ h3 {
 .familytree li {
 	float: left; 
 	position: relative;
-	padding: 20px 5px 0 5px;
+	padding: 20px 3px 0 3px;
 	transition: all 0.5s;
 	-webkit-transition: all 0.5s;
 	-moz-transition: all 0.5s;
@@ -132,7 +132,7 @@ h3 {
 /*Node styling*/
 .familytree li p{
 	border: 1px solid rgb(71, 71, 71);
-	padding: 5px 5px;
+	padding: auto;
     margin: auto;
 	text-decoration: none;
     text-align: center;
