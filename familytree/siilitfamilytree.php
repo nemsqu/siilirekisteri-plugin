@@ -52,69 +52,69 @@ class siilitfamilytree{
         //Dad's side's IDs
         $dadsid = $wpdb->get_var("SELECT Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$id}'");
         $dadsDadsid = $wpdb->get_var("SELECT Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsid}'");
-        $dadsMumsid = $wpdb->get_var("SELECT Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsid}'");
+        $dadsMumsid = $wpdb->get_var("SELECT Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsid}'");
 
         $dadsDadsDadsid = $wpdb->get_var("SELECT Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsDadsid}'");
-        $dadsDadsMumsid = $wpdb->get_var("SELECT Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsDadsid}'");
+        $dadsDadsMumsid = $wpdb->get_var("SELECT Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsDadsid}'");
         $dadsMumsDadsid = $wpdb->get_var("SELECT Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsMumsid}'");
-        $dadsMumsMumsid = $wpdb->get_var("SELECT Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsMumsid}'");
+        $dadsMumsMumsid = $wpdb->get_var("SELECT Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsMumsid}'");
 
         $dadsDadsDadsDadsid = $wpdb->get_var("SELECT Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsDadsDadsid}'");
-        $dadsDadsDadsMumsid = $wpdb->get_var("SELECT Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsDadsDadsid}'");
+        $dadsDadsDadsMumsid = $wpdb->get_var("SELECT Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsDadsDadsid}'");
         $dadsDadsMumsDadsid = $wpdb->get_var("SELECT Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsDadsMumsid}'");
-        $dadsDadsMumsMumsid = $wpdb->get_var("SELECT Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsDadsMumsid}'");
+        $dadsDadsMumsMumsid = $wpdb->get_var("SELECT Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsDadsMumsid}'");
         $dadsMumsDadsDadsid = $wpdb->get_var("SELECT Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsMumsDadsid}'");
-        $dadsMumsDadsMumsid = $wpdb->get_var("SELECT Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsMumsDadsid}'");
+        $dadsMumsDadsMumsid = $wpdb->get_var("SELECT Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsMumsDadsid}'");
         $dadsMumsMumsDadsid = $wpdb->get_var("SELECT Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsMumsMumsid}'");
-        $dadsMumsMumsMumsid = $wpdb->get_var("SELECT Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsMumsMumsid}'");
+        $dadsMumsMumsMumsid = $wpdb->get_var("SELECT Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsMumsMumsid}'");
 
         //Dad's side's values
-        $dad = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Aiti, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsid}'");
-        $dadsDad = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Aiti, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsDadsid}'");
-        $dadsMum = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Aiti, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsMumsid}'");
+        $dad = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Emo, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsid}'");
+        $dadsDad = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Emo, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsDadsid}'");
+        $dadsMum = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Emo, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsMumsid}'");
 
-        $dadsDadsDad = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Aiti, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsDadsDadsid}'");
-        $dadsDadsMum = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Aiti, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsDadsMumsid}'");
-        $dadsMumsDad = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Aiti, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsMumsDadsid}'");
-        $dadsMumsMum = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Aiti, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsMumsMumsid}'");
+        $dadsDadsDad = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Emo, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsDadsDadsid}'");
+        $dadsDadsMum = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Emo, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsDadsMumsid}'");
+        $dadsMumsDad = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Emo, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsMumsDadsid}'");
+        $dadsMumsMum = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Emo, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsMumsMumsid}'");
 
-        $dadsDadsDadsDad = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Aiti, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsDadsDadsDadsid}'");
-        $dadsDadsDadsMum = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Aiti, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsDadsDadsMumsid}'");
-        $dadsDadsMumsDad = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Aiti, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsDadsMumsDadsid}'");
-        $dadsDadsMumsMum = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Aiti, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsDadsMumsMumsid}'");
-        $dadsMumsDadsDad = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Aiti, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsMumsDadsDadsid}'");
-        $dadsMumsDadsMum = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Aiti, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsMumsDadsMumsid}'");
-        $dadsMumsMumsDad = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Aiti, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsMumsMumsDadsid}'");
-        $dadsMumsMumsMum = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Aiti, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsMumsMumsMumsid}'");
+        $dadsDadsDadsDad = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Emo, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsDadsDadsDadsid}'");
+        $dadsDadsDadsMum = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Emo, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsDadsDadsMumsid}'");
+        $dadsDadsMumsDad = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Emo, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsDadsMumsDadsid}'");
+        $dadsDadsMumsMum = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Emo, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsDadsMumsMumsid}'");
+        $dadsMumsDadsDad = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Emo, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsMumsDadsDadsid}'");
+        $dadsMumsDadsMum = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Emo, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsMumsDadsMumsid}'");
+        $dadsMumsMumsDad = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Emo, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsMumsMumsDadsid}'");
+        $dadsMumsMumsMum = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Emo, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsMumsMumsMumsid}'");
         
         //Mum's side's IDs
-        $mumsid = $wpdb->get_var("SELECT Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$id}'");
+        $mumsid = $wpdb->get_var("SELECT Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$id}'");
         $mumsDadsid = $wpdb->get_var("SELECT Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsid}'");
-        $mumsMumsid = $wpdb->get_var("SELECT Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsid}'");
+        $mumsMumsid = $wpdb->get_var("SELECT Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsid}'");
 
         $mumsDadsDadsid = $wpdb->get_var("SELECT Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsDadsid}'");
-        $mumsDadsMumsid = $wpdb->get_var("SELECT Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsDadsid}'");
+        $mumsDadsMumsid = $wpdb->get_var("SELECT Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsDadsid}'");
         $mumsMumsDadsid = $wpdb->get_var("SELECT Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsMumsid}'");
-        $mumsMumsMumsid = $wpdb->get_var("SELECT Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsMumsid}'");
+        $mumsMumsMumsid = $wpdb->get_var("SELECT Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsMumsid}'");
 
         $mumsDadsDadsDadsid = $wpdb->get_var("SELECT Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsDadsDadsid}'");
-        $mumsDadsDadsMumsid = $wpdb->get_var("SELECT Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsDadsDadsid}'");
+        $mumsDadsDadsMumsid = $wpdb->get_var("SELECT Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsDadsDadsid}'");
         $mumsDadsMumsDadsid = $wpdb->get_var("SELECT Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsDadsMumsid}'");
-        $mumsDadsMumsMumsid = $wpdb->get_var("SELECT Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsDadsMumsid}'");
+        $mumsDadsMumsMumsid = $wpdb->get_var("SELECT Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsDadsMumsid}'");
         $mumsMumsDadsDadsid = $wpdb->get_var("SELECT Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsMumsDadsid}'");
-        $mumsMumsDadsMumsid = $wpdb->get_var("SELECT Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsMumsDadsid}'");
+        $mumsMumsDadsMumsid = $wpdb->get_var("SELECT Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsMumsDadsid}'");
         $mumsMumsMumsDadsid = $wpdb->get_var("SELECT Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsMumsMumsid}'");
-        $mumsMumsMumsMumsid = $wpdb->get_var("SELECT Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsMumsMumsid}'");
+        $mumsMumsMumsMumsid = $wpdb->get_var("SELECT Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsMumsMumsid}'");
 
         //Mum's side's values
-        $mum = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Aiti, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsid}'");
-        $mumsDad = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Aiti, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsDadsid}'");
-        $mumsMum = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Aiti, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsMumsid}'");
+        $mum = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Emo, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsid}'");
+        $mumsDad = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Emo, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsDadsid}'");
+        $mumsMum = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Emo, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsMumsid}'");
 
-        $mumsDadsDad = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Aiti, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsDadsDadsid}'");
-        $mumsDadsMum = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Aiti, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsDadsMumsid}'");
-        $mumsMumsDad = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Aiti, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsMumsDadsid}'");
-        $mumsMumsMum = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Aiti, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsMumsMumsid}'");
+        $mumsDadsDad = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Emo, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsDadsDadsid}'");
+        $mumsDadsMum = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Emo, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsDadsMumsid}'");
+        $mumsMumsDad = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Emo, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsMumsDadsid}'");
+        $mumsMumsMum = $wpdb->get_results("SELECT Kasvattaja, Nimi, Siilinro, Kuolinsyy, Emo, Isa FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsMumsMumsid}'");
 
         //Check Dad's side's values, replace values that weren't found from the db
         if($dad[0]->Nimi == null){

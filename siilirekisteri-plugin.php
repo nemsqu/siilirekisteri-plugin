@@ -47,7 +47,7 @@
             <?php wp_nonce_field('add_siili','siili-was-added'); ?>
             <input name='action' value='add_siili' type='hidden'>
             Nimi: <input type='text' id='name' name='name' required><br>
-            Kasvattaja: <input type='text' id='select_breeder' list='breeder-list' name='breeder' required><br>
+            Kasvattaja: <input type='text' id='select_breeder' list='breeder-list' name='breeder'><br>
             <datalist id='breeder-list'>
                 <?php foreach($breeders as &$value){
                     echo "<option value='$value'>$value</option>";
@@ -124,19 +124,19 @@ function siilit_add_new() {
     }
     
     //create hedgehog's ID
-    $amount = $wpdb->get_var("SELECT Hedgehogs FROM {$wpdb->prefix}siilit_vuosittain WHERE year = $year");
+    $amount = $wpdb->get_var("SELECT Siilit FROM {$wpdb->prefix}siilit_vuosittain WHERE Vuosi = $year");
     
     if($amount == 0){
         $wpdb->query(
             $wpdb->prepare(
-                "INSERT INTO {$wpdb->prefix}siilit_vuosittain (Year, Hedgehogs)
+                "INSERT INTO {$wpdb->prefix}siilit_vuosittain (Vuosi, Siilit)
                 VALUES (%d, %d)", array($year, 1)
             )
         );
     } else {
         $wpdb->query(
             $wpdb->prepare(
-                "UPDATE {$wpdb->prefix}siilit_vuosittain SET Hedgehogs = %d WHERE Year = %d", $amount + 1, $year
+                "UPDATE {$wpdb->prefix}siilit_vuosittain SET Siilit = %d WHERE Vuosi = %d", $amount + 1, $year
             )
         );
     }
@@ -147,12 +147,12 @@ function siilit_add_new() {
 
 
     //Add new breeders to database
-    $dbbreeder = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}siilit_kasvattajat WHERE nimi = '$breeder'");
+    $dbbreeder = $wpdb->get_var("SELECT ID FROM {$wpdb->prefix}siilit_kasvattajat WHERE Nimi = '$breeder'");
 
     if($dbbreeder == NULL){
         $wpdb->query(
             $wpdb->prepare(
-                "INSERT INTO {$wpdb->prefix}siilit_kasvattajat (id, nimi)
+                "INSERT INTO {$wpdb->prefix}siilit_kasvattajat (ID, Nimi)
                 VALUES (NULL, %s)", $breeder
             )
         );
@@ -160,7 +160,7 @@ function siilit_add_new() {
 
     $wpdb->query(
         $wpdb->prepare(
-            "INSERT INTO {$wpdb->prefix}siilit (Siilinro, Nimi, Kasvattaja, Omistaja, Isa, Aiti, Syntyma_aika, Kuollut, Kuolinsyy)
+            "INSERT INTO {$wpdb->prefix}siilit (Siilinro, Nimi, Kasvattaja, Omistaja, Isa, Emo, Syntyma_aika, Kuollut, Kuolinsyy)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %d, %s)", $id, $name, $breeder, $owner, $father, $mother, $bday, 0, ''
         )
     );
@@ -239,8 +239,8 @@ function siilit_add_new() {
 
     $dadsdad = $wpdb->get_results($wpdb->prepare("SELECT Isa, Siilinro FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $father));
     $mumsdad = $wpdb->get_results($wpdb->prepare("SELECT Isa, Siilinro FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $mother));
-    $dadsmum = $wpdb->get_results($wpdb->prepare("SELECT Aiti, Siilinro FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $father));
-    $mumsmum = $wpdb->get_results($wpdb->prepare("SELECT Aiti, Siilinro FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $mother));
+    $dadsmum = $wpdb->get_results($wpdb->prepare("SELECT Emo, Siilinro FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $father));
+    $mumsmum = $wpdb->get_results($wpdb->prepare("SELECT Emo, Siilinro FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $mother));
 
     $dadsdadsdad = $wpdb->get_results("SELECT Isa, Siilinro FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsdad[0]->Siilinro}'");
     $dadsdadsmum = $wpdb->get_results("SELECT Isa, Siilinro FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsdad[0]->Siilinro}'");
@@ -260,33 +260,33 @@ function siilit_add_new() {
     }
 
     //parents: mother-son ?
-    if(strcmp($dadsmum[0]->Aiti, $mother) == 0 && $dadsmum[0]->Aiti && $mother){
+    if(strcmp($dadsmum[0]->Emo, $mother) == 0 && $dadsmum[0]->Emo && $mother){
         $motherson = true;
     }
 
     //parents have one or two same parent(s)
     if(strcmp($dadsdad[0]->Isa, $mumsdad[0]->Isa) == 0 && $dadsdad[0]->Isa && $mumsdad[0]->Isa){
         $siblings = true;
-    }else if(strcmp($dadsmum[0]->Aiti, $mumsmum[0]->Aiti) == 0 && $dadsmum[0]->Aiti && $mumsmum[0]->Aiti){
+    }else if(strcmp($dadsmum[0]->Emo, $mumsmum[0]->Emo) == 0 && $dadsmum[0]->Emo && $mumsmum[0]->Emo){
         $siblings = true;
     }
 
     //parents' parents and their parents' parents
     if(strcmp($dadsdadsdad[0]->Isa, $mumsdad[0]->Isa) == 0 && $dadsdadsdad[0]->Isa && $mumsdad[0]->Isa){
         $familyWarning = true;
-    } else if(strcmp($dadsdadsmum[0]->Aiti, $mumsmum[0]->Aiti) == 0 && $dadsdadsmum[0]->Aiti && $mumsmum[0]->Aiti){
+    } else if(strcmp($dadsdadsmum[0]->Emo, $mumsmum[0]->Emo) == 0 && $dadsdadsmum[0]->Emo && $mumsmum[0]->Emo){
         $familyWarning = true;
     } else if(strcmp($dadsmumsdad[0]->Isa, $mumsdad[0]->Isa) == 0 && $dadsmumsdad[0]->Isa && $mumsdad[0]->Isa){
         $familyWarning = true;
-    } else if(strcmp($dadsmumsmum[0]->Aiti, $mumsmum[0]->Aiti) == 0 && $dadsmumsmum[0]->Aiti && $mumsmum[0]->Aiti){
+    } else if(strcmp($dadsmumsmum[0]->Emo, $mumsmum[0]->Emo) == 0 && $dadsmumsmum[0]->Emo && $mumsmum[0]->Emo){
         $familyWarning = true;
     } else if(strcmp($mumsdadsdad[0]->Isa, $dadsdad[0]->Isa) == 0 && $mumsdadsdad[0]->Isa && $dadsdad[0]->Isa){
         $familyWarning = true;
-    } else if(strcmp($mumsdadsmum[0]->Aiti, $dadsmum[0]->Aiti) == 0 && $mumsdadsmum[0]->Aiti && $dadsmum[0]->Aiti){
+    } else if(strcmp($mumsdadsmum[0]->Emo, $dadsmum[0]->Emo) == 0 && $mumsdadsmum[0]->Emo && $dadsmum[0]->Emo){
         $familyWarning = true;
     } else if(strcmp($mumsmumsdad[0]->Isa, $dadsdad[0]->Isa) == 0 && $mumsmumsdad[0]->Isa && $dadsdad[0]->Isa){
         $familyWarning = true;
-    } else if(strcmp($mumsmumsmum[0]->Aiti, $dadsmum[0]->Aiti) == 0 && $mumsmumsmum[0]->Aiti && $dadsmum[0]->Aiti){
+    } else if(strcmp($mumsmumsmum[0]->Emo, $dadsmum[0]->Emo) == 0 && $mumsmumsmum[0]->Emo && $dadsmum[0]->Emo){
         $familyWarning = true;
     }
 
@@ -328,47 +328,47 @@ function siilit_add_new() {
     $wpdb->show_errors();
 
     //First generation of parents
-    $parentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $id));
+    $parentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $id));
 
     $parents = [];
-    $parents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $parentsids[0]->Aiti, $parentsids[0]->Isa));
+    $parents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $parentsids[0]->Emo, $parentsids[0]->Isa));
 
     //Second generation of parents
     $dadsparents = $mumsparents = $dadsparentsids = $mumsparentsids = [];
     foreach($parents as &$parent){
         if(substr($parent->Siilinro, -1) == 'U'){
-            $dadsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
+            $dadsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
         } else {
-            $mumsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
+            $mumsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
         }
     }
     unset($parent);
 
-    $dadsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $dadsparentsids[0]->Aiti, $dadsparentsids[0]->Isa));
-    $mumsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $mumsparentsids[0]->Aiti, $mumsparentsids[0]->Isa));
+    $dadsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $dadsparentsids[0]->Emo, $dadsparentsids[0]->Isa));
+    $mumsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $mumsparentsids[0]->Emo, $mumsparentsids[0]->Isa));
 
     //Third generation of parents
     $dadsdadsparents = $dadsmumsparents = $mumsdadsparents = $mumsmumsparents = $dadsdadsparentsids = $mumsmumsparentsids = $mumsdadsparentsids = $dadsmumsparentsids = [];
     foreach($dadsparents as &$parent){
         if(substr($parent->Siilinro, -1) == 'U'){
-            $dadsdadsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
+            $dadsdadsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
         } else {
-            $dadsmumsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
+            $dadsmumsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
         }
     }
     unset($parent);
     foreach($mumsparents as &$parent){
         if(substr($parent->Siilinro, -1) == 'U'){
-            $mumsdadsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
+            $mumsdadsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
         } else {
-            $mumsmumsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
+            $mumsmumsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
         }
     }
     unset($parent);
-    $dadsdadsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $dadsdadsparentsids[0]->Aiti, $dadsdadsparentsids[0]->Isa));
-    $dadsmumsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $dadsmumsparentsids[0]->Aiti, $dadsmumsparentsids[0]->Isa));
-    $mumsdadsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $mumsdadsparentsids[0]->Aiti, $mumsdadsparentsids[0]->Isa));
-    $mumsmumsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $mumsmumsparentsids[0]->Aiti, $mumsmumsparentsids[0]->Isa));
+    $dadsdadsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $dadsdadsparentsids[0]->Emo, $dadsdadsparentsids[0]->Isa));
+    $dadsmumsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $dadsmumsparentsids[0]->Emo, $dadsmumsparentsids[0]->Isa));
+    $mumsdadsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $mumsdadsparentsids[0]->Emo, $mumsdadsparentsids[0]->Isa));
+    $mumsmumsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $mumsmumsparentsids[0]->Emo, $mumsmumsparentsids[0]->Isa));
 
     //Fourth generation of parents
     $dadsdadsdadsparents = $dadsdadsmumsparents = $dadsmumsdadsparents = $dadsmumsmumsparents = $mumsdadsdadsparents = $mumsdadsmumsparents = $mumsmumsdadsparents = $mumsmumsmumsparents = []; 
@@ -376,44 +376,44 @@ function siilit_add_new() {
 
      foreach($dadsdadsparents as &$parent){
         if(substr($parent->Siilinro, -1) == 'U'){
-            $dadsdadsdadsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
+            $dadsdadsdadsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
         } else {
-            $dadsdadsmumsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
+            $dadsdadsmumsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
         }
     }
     unset($parent);
     foreach($dadsmumsparents as &$parent){
         if(substr($parent->Siilinro, -1) == 'U'){
-            $dadsmumsdadsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
+            $dadsmumsdadsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
         } else {
-            $dadsmumsmumsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
+            $dadsmumsmumsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
         }
     }
     unset($parent);
     foreach($mumsdadsparents as &$parent){
         if(substr($parent->Siilinro, -1) == 'U'){
-            $mumsdadsdadsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
+            $mumsdadsdadsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
         } else {
-            $mumsdadsmumsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
+            $mumsdadsmumsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
         }
     }
     unset($parent);
     foreach($mumsmumsparents as &$parent){
         if(substr($parent->Siilinro, -1) == 'U'){
-            $mumsmumsdadsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
+            $mumsmumsdadsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
         } else {
-            $mumsmumsmumsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Aiti FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
+            $mumsmumsmumsparentsids = $wpdb->get_results($wpdb->prepare("SELECT Isa, Emo FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $parent->Siilinro));
         }
     }
     unset($parent);
-    $dadsdadsdadsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $dadsdadsdadsparentsids[0]->Aiti, $dadsdadsdadsparentsids[0]->Isa));
-    $dadsdadsmumsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $dadsmumsmumsparentsids[0]->Aiti, $dadsmumsmumsparentsids[0]->Isa));
-    $dadsmumsdadsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $dadsmumsdadsparentsids[0]->Aiti, $dadsmumsdadsparentsids[0]->Isa));
-    $dadsmumsmumsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $dadsmumsmumsparentsids[0]->Aiti, $dadsmumsmumsparentsids[0]->Isa));
-    $mumsdadsdadsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $mumsdadsdadsparentsids[0]->Aiti, $mumsdadsdadsparentsids[0]->Isa));
-    $mumsdadsmumsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $mumsdadsmumsparentsids[0]->Aiti, $mumsdadsmumsparentsids[0]->Isa));
-    $mumsmumsdadsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $mumsmumsdadsparentsids[0]->Aiti, $mumsmumsdadsparentsids[0]->Isa));
-    $mumsmumsmumsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $mumsmumsmumsparentsids[0]->Aiti, $mumsmumsmumsparentsids[0]->Isa));
+    $dadsdadsdadsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $dadsdadsdadsparentsids[0]->Emo, $dadsdadsdadsparentsids[0]->Isa));
+    $dadsdadsmumsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $dadsmumsmumsparentsids[0]->Emo, $dadsmumsmumsparentsids[0]->Isa));
+    $dadsmumsdadsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $dadsmumsdadsparentsids[0]->Emo, $dadsmumsdadsparentsids[0]->Isa));
+    $dadsmumsmumsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $dadsmumsmumsparentsids[0]->Emo, $dadsmumsmumsparentsids[0]->Isa));
+    $mumsdadsdadsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $mumsdadsdadsparentsids[0]->Emo, $mumsdadsdadsparentsids[0]->Isa));
+    $mumsdadsmumsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $mumsdadsmumsparentsids[0]->Emo, $mumsdadsmumsparentsids[0]->Isa));
+    $mumsmumsdadsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $mumsmumsdadsparentsids[0]->Emo, $mumsmumsdadsparentsids[0]->Isa));
+    $mumsmumsmumsparents = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s' OR Siilinro = '%s'", $mumsmumsmumsparentsids[0]->Emo, $mumsmumsmumsparentsids[0]->Isa));
 
     $family = array('parents'=> $parents, 'dadsparents' => $dadsparents, 'mumsparents' => $mumsparents, 'dadsdadsparents' => $dadsdadsparents, 'dadsmumsparents' => $dadsmumsparents, 'mumsdadsparents' => $mumsdadsparents, 'mumsmumsparents' => $mumsmumsparents, 'dadsdadsdadsparents' => $dadsdadsdadsparents, 'dadsdadsmumsparents' => $dadsdadsmumsparents, 'dadsmumsdadsparents' => $dadsmumsdadsparents, 'dadsmumsmumsparents' => $dadsmumsmumsparents, 'mumsdadsdadsparents' => $mumsdadsdadsparents, 'mumsdadsmumsparents' => $mumsdadsmumsparents, 'mumsmumsdadsparents' => $mumsmumsdadsparents, 'mumsmumsmumsparents' => $mumsmumsmumsparents);
 
@@ -474,11 +474,11 @@ function siilit_add_new() {
     $siilit_per_year_table = $wpdb->prefix . 'siilit_vuosittain';
 
     $query = "CREATE TABLE $siilit_table (
-                'Siilinro' varchar(255) NOT NULL
+                'Siilinro' varchar(13) NOT NULL
                 , 'Nimi' varchar(255) DEFAULT NULL
                 , 'Kasvattaja' varchar(255) DEFAULT NULL
                 , 'Isa' varchar(255) DEFAULT NULL
-                , 'Aiti' varchar(255) DEFAULT NULL
+                , 'Emo' varchar(255) DEFAULT NULL
                 , 'Syntyma_aika' date DEFAULT NULL
                 , 'Kuollut' bit(1) DEFAULT b'0'
                 , 'Kuolinsyy' varchar(255) DEFAULT NULL
@@ -488,9 +488,9 @@ function siilit_add_new() {
     dbDelta($query);
 
     $query = "CREATE TABLE $siilit_breeders_table (
-            'id' int(11) NOT NULL AUTO_INCREMENT
-            , 'nimi' varchar(255) NOT NULL
-            , PRIMARY KEY ('id')
+            'ID' int(11) NOT NULL AUTO_INCREMENT
+            , 'Nimi' varchar(255) NOT NULL
+            , PRIMARY KEY ('ID')
     )";
     dbDelta($query);
 
@@ -502,9 +502,9 @@ function siilit_add_new() {
     dbDelta($query);
 
     $query = "CREATE TABLE $siilit_per_year_table (
-            'year' int(11) NOT NULL
-            , 'hedgehogs' int(11) NOT NULL
-            , PRIMARY KEY ('year')
+            'Vuosi' int(11) NOT NULL
+            , 'Siilit' int(11) NOT NULL
+            , PRIMARY KEY ('Vuosi')
     )";
     dbDelta($query);
 }
