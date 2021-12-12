@@ -140,6 +140,7 @@ h3 {
 	color: rgb(0, 0, 0);
 	display: inline-block;
     max-width: 9vw;
+    min-width: 8vw;
     flex: content;
     white-space: pre-line;
 

@@ -37,7 +37,7 @@
 
  function siilit_init($name = null, $breeder = null, $bday = null, $gender = null, $father = null, $mother = null, $dead = null, $ilnesses = null){
     global $wpdb;
-    $breeders = $wpdb->get_col("SELECT nimi FROM {$wpdb->prefix}siilit_kasvattajat");
+    $breeders = $wpdb->get_col("SELECT Nimi FROM {$wpdb->prefix}siilit_kasvattajat");
     $hedgehogs = $wpdb->get_results("SELECT Nimi, Siilinro FROM {$wpdb->prefix}siilit");
     
 ?>
@@ -160,10 +160,11 @@ function siilit_add_new() {
 
     $wpdb->query(
         $wpdb->prepare(
-            "INSERT INTO {$wpdb->prefix}siilit (Siilinro, Nimi, Kasvattaja, Omistaja, Isa, Emo, Syntyma_aika, Kuollut, Kuolinsyy)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %d, %s)", $id, $name, $breeder, $owner, $father, $mother, $bday, 0, ''
+            "INSERT INTO {$wpdb->prefix}siilit (Siilinro, Nimi, Kasvattaja, Isa, Emo, Syntyma_aika, Kuollut, Kuolinsyy, Omistaja)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %d, %s)", $id, $name, $breeder, $father, $mother, $bday, 0, '', $owner
         )
     );
+    echo $amount;
     $successCheck = $wpdb->get_var("SELECT Nimi FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$id}'");
     if(!$successCheck){
         siilit_handle_failure();
@@ -243,13 +244,13 @@ function siilit_add_new() {
     $mumsmum = $wpdb->get_results($wpdb->prepare("SELECT Emo, Siilinro FROM {$wpdb->prefix}siilit WHERE Siilinro = '%s'", $mother));
 
     $dadsdadsdad = $wpdb->get_results("SELECT Isa, Siilinro FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsdad[0]->Siilinro}'");
-    $dadsdadsmum = $wpdb->get_results("SELECT Isa, Siilinro FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsdad[0]->Siilinro}'");
+    $dadsdadsmum = $wpdb->get_results("SELECT Emo, Siilinro FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsdad[0]->Siilinro}'");
     $dadsmumsdad = $wpdb->get_results("SELECT Isa, Siilinro FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsmum[0]->Siilinro}'");
-    $dadsmumsmum = $wpdb->get_results("SELECT Isa, Siilinro FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsmum[0]->Siilinro}'");
+    $dadsmumsmum = $wpdb->get_results("SELECT Emo, Siilinro FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$dadsmum[0]->Siilinro}'");
     $mumsdadsdad = $wpdb->get_results("SELECT Isa, Siilinro FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsdad[0]->Siilinro}'");
-    $mumsdadsmum = $wpdb->get_results("SELECT Isa, Siilinro FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsdad[0]->Siilinro}'");
+    $mumsdadsmum = $wpdb->get_results("SELECT Emo, Siilinro FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsdad[0]->Siilinro}'");
     $mumsmumsdad = $wpdb->get_results("SELECT Isa, Siilinro FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsmum[0]->Siilinro}'");
-    $mumsmumsmum = $wpdb->get_results("SELECT Isa, Siilinro FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsmum[0]->Siilinro}'");
+    $mumsmumsmum = $wpdb->get_results("SELECT Emo, Siilinro FROM {$wpdb->prefix}siilit WHERE Siilinro = '{$mumsmum[0]->Siilinro}'");
 
 
     $siblings = $fatherdaughter = $motherson = $familyWarning = false;
@@ -474,37 +475,37 @@ function siilit_add_new() {
     $siilit_per_year_table = $wpdb->prefix . 'siilit_vuosittain';
 
     $query = "CREATE TABLE $siilit_table (
-                'Siilinro' varchar(13) NOT NULL
-                , 'Nimi' varchar(255) DEFAULT NULL
-                , 'Kasvattaja' varchar(255) DEFAULT NULL
-                , 'Isa' varchar(255) DEFAULT NULL
-                , 'Emo' varchar(255) DEFAULT NULL
-                , 'Syntyma_aika' date DEFAULT NULL
-                , 'Kuollut' bit(1) DEFAULT b'0'
-                , 'Kuolinsyy' varchar(255) DEFAULT NULL
-                , 'Omistaja' varchar(255) DEFAULT NULL
-                , PRIMARY KEY ('Siilinro')
+                 `Siilinro` varchar(255) NOT NULL
+                , `Nimi` varchar(255) DEFAULT NULL
+                , `Kasvattaja` varchar(255) DEFAULT NULL
+                , `Isa` varchar(255) DEFAULT NULL
+                , `Emo` varchar(255) DEFAULT NULL
+                , `Syntyma_aika` varchar(11) DEFAULT NULL
+                , `Kuollut` bit(1) DEFAULT b'0'
+                , `Kuolinsyy` varchar(255) DEFAULT NULL
+                , `Omistaja` varchar(255) DEFAULT NULL
+                , PRIMARY KEY (`Siilinro`)
     )";
     dbDelta($query);
 
     $query = "CREATE TABLE $siilit_breeders_table (
-            'ID' int(11) NOT NULL AUTO_INCREMENT
-            , 'Nimi' varchar(255) NOT NULL
-            , PRIMARY KEY ('ID')
+            `ID` int(11) NOT NULL AUTO_INCREMENT
+            , `Nimi` varchar(255) NOT NULL
+            , PRIMARY KEY (`ID`)
     )";
     dbDelta($query);
 
     $query = "CREATE TABLE $siilit_mothers_table (
-            'Siilinro' varchar(255) NOT NULL
-            , 'PentueSynt' date NOT NULL
-            , PRIMARY KEY ('Siilinro')
+            `Siilinro` varchar(255) NOT NULL
+            , `PentueSynt` date NOT NULL
+            , PRIMARY KEY (`Siilinro`)
     )";
     dbDelta($query);
 
     $query = "CREATE TABLE $siilit_per_year_table (
-            'Vuosi' int(11) NOT NULL
-            , 'Siilit' int(11) NOT NULL
-            , PRIMARY KEY ('Vuosi')
+            `Vuosi` int(11) NOT NULL
+            , `Siilit` int(11) NOT NULL
+            , PRIMARY KEY (`Vuosi`)
     )";
     dbDelta($query);
 }
