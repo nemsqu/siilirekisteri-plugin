@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Siilirekisteri toiminnot
- * Description: For Siilirekisteri. To be used with WP Data Access or similar.
+ * Description: For Siilirekisteri. To be used with WP Data Access or a similar plugin.
  * Version: 1.0
  * Author: Nelli Kemi
  */
