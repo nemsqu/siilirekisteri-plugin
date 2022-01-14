@@ -38,7 +38,7 @@ function siilit_checkArrayContents(data){
 
 function siilit_showTree(data){
     let warning = document.getElementById("warnings");
-    console.log('wanted: ' + data.wanted[0]);
+
     if(!data.wanted[0]){
         warning.innerHTML = "Siiliä ei löytynyt. Tarkista tiedot."
         return null;
@@ -48,6 +48,7 @@ function siilit_showTree(data){
     let ilnessesWarning = document.createElement("h3");
     ilnessesWarning.innerHTML = "Suvusta löytyy merkintöjä:<br>";
     ilnessesWarning.id = "ilnesses-warning";
+    ilnessesWarning.className = "warning";
     let ilnesses = false;
 
     //iterating through data for hedgehogs without IDs and checking familyilnesses
@@ -60,7 +61,7 @@ function siilit_showTree(data){
         }
     }
 
-    siilit_createTable(data);
+    siilit_createTree(data);
     if(ilnesses){
         treecontainer.appendChild(ilnessesWarning);
     }
@@ -131,7 +132,7 @@ function siilit_checkFamilyHistory(data){
 }
 
 
-function siilit_createTable(data){
+function siilit_createTree(data){
     let tree = document.createElement("div");
     tree.id = "tree";
     tree.className = "familytree";
